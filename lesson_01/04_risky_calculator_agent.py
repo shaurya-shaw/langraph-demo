@@ -18,7 +18,7 @@ class State(TypedDict):
 
 def risky_calculator(a:int,b:int)->int:
     """multiply two number,but occassionally fail"""
-    if random.random() < 0.7:
+    if random.random() < 0.6:
         raise RuntimeError("calculator temporarily failed")
 
     return a*b
@@ -46,7 +46,29 @@ def should_continue(state:State):
 
     return "end"
 
-tool_node=ToolNode(tools)   
+tool_node=ToolNode(tools,handle_tool_errors=True)   
+"""
+Strategy A — ToolNode handles the exception
+handle_tool_errors=True does NOT mean "retry the tool.
+It means:
+"Don't crash the graph when a tool throws an exception; convert the exception into a tool message."
+The LLM is then responsible for deciding whether to retry.
+
+The first is useful when the LLM needs to react to the tool's result:
+invalid argument
+missing information
+tool returned unusable result
+wrong search query
+
+Strategy B
+Graph-controlled retry
+
+The second is useful for transient infrastructure failures:
+API timeout
+network error
+temporary database failure
+rate limit
+"""
 
 graph=StateGraph(State)
 
