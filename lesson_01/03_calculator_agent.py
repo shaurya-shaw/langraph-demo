@@ -87,7 +87,7 @@ app=graph.compile()
 result=app.invoke({
     "messages":[{
         "role":"user",
-        "content":"What is (20 + 30)*5?"
+        "content":"What is (20 + 20)*10?"
     }]
 })
 
