@@ -1,0 +1,4 @@
+A professional agent separates the conversation interface from the agent graph.
+The key idea is:
+The graph should not know that the user is using a terminal.
+It shouldn't contain input().
